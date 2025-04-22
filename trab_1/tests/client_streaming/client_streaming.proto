@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package streaming;
+
+service StreamService {
+  rpc SumStream (stream Number) returns (SumResponse);
+}
+
+message Number {
+  int32 value = 1;
+}
+
+message SumResponse {
+  int32 total = 1;
+}
