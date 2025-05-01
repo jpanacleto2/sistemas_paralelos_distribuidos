@@ -56,6 +56,6 @@ app.post("/decrypt", (req, res) => {
     });
 });
 
-app.listen(PORT, () => {
+app.listen(process.env.PORT, () => {
     console.log(`API Gateway running on http://0.0.0.0:${process.env.PORT}`);
 });

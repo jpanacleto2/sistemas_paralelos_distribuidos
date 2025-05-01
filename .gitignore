@@ -4,3 +4,5 @@ node_modules
 .env
 */crypto_pb2.py
 */crypto_pb2_grpc.py
+*/crypto_pb.js
+*/crypto_grpc_pb.js
