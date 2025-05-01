@@ -3,24 +3,15 @@ syntax = "proto3";
 package crypto;
 
 service CryptoService {
-  rpc Encrypt (EncryptRequest) returns (EncryptResponse);
-  rpc Decrypt (DecryptRequest) returns (DecryptResponse);
+  rpc Encrypt (CryptoRequest) returns (CryptoResponse);
+  rpc Decrypt (CryptoRequest) returns (CryptoResponse);
 }
 
-message EncryptRequest {
-  string plaintext = 1;
-  string key = 2; // Ou outro parâmetro necessário para a encriptação
+message CryptoRequest {
+  string text = 1;
+  string key = 2;
 }
 
-message EncryptResponse {
-  string ciphertext = 1;
-}
-
-message DecryptRequest {
-  string ciphertext = 1;
-  string key = 2; // Ou outro parâmetro necessário para a decriptação
-}
-
-message DecryptResponse {
-  string plaintext = 1;
+message CryptoResponse {
+  string result = 1;
 }
