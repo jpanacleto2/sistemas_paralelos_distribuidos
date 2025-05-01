@@ -1,21 +1,22 @@
 def vigenere_encrypt(plain_text: str, key: str) -> str:
-    encrypted_text = []
-    key_length = len(key)
+    # Filtra apenas caracteres alfabéticos da chave
+    clean_key = [k.lower() for k in key if k.isalpha()]
+    if not clean_key:
+        return plain_text  # Retorna original se chave não tem letras
     
-    for i, char in enumerate(plain_text):
+    encrypted_text = []
+    key_len = len(clean_key)
+    key_idx = 0
+    
+    for char in plain_text:
         if char.isalpha():
-            # Calcula o deslocamento baseado na letra da chave
-            shift = ord(key[i % key_length].lower()) - ord('a')
-            
+            shift = ord(clean_key[key_idx % key_len]) - ord('a')
             if char.isupper():
-                # Processa letras maiúsculas
-                encrypted_char = chr((ord(char) - ord('A') + shift) % 26 + ord('A'))
+                encrypted_text.append(chr((ord(char) - ord('A') + shift) % 26 + ord('A')))
             else:
-                # Processa letras minúsculas
-                encrypted_char = chr((ord(char) - ord('a') + shift) % 26 + ord('a'))
-            encrypted_text.append(encrypted_char)
+                encrypted_text.append(chr((ord(char) - ord('a') + shift) % 26 + ord('a')))
+            key_idx += 1
         else:
-            # Mantém caracteres não alfabéticos
             encrypted_text.append(char)
     
     return ''.join(encrypted_text)

@@ -68,7 +68,7 @@ npm start
 cd encryptionServer
 
 # Criar ambiente virtual (recomendado)
-python -m venv venv
+python3 -m venv venv
 source venv/bin/activate  # Linux/Mac
 # ou venv\Scripts\activate  # Windows
 
@@ -76,10 +76,10 @@ source venv/bin/activate  # Linux/Mac
 pip install -r ../shared/requirements.txt
 
 # Gerar código gRPC a partir do protofile (Os arquivos _pb2.js e _pb2_grpc.js)
-python -m grpc_tools.protoc -I../shared --python_out=. --grpc_python_out=. ../shared/crypto.proto
+python3 -m grpc_tools.protoc -I../shared --python_out=. --grpc_python_out=. ../shared/crypto.proto
 
 # Executar servidor
-python encryption_server.py
+python3 encryption_server.py
 ```
 
 ## 4. Servidor de Decodificação (Python)
@@ -90,7 +90,7 @@ python encryption_server.py
 cd decryptionServer
 
 # Criar ambiente virtual (recomendado)
-python -m venv venv
+python3 -m venv venv
 source venv/bin/activate  # Linux/Mac
 # ou venv\Scripts\activate  # Windows
 
@@ -98,25 +98,30 @@ source venv/bin/activate  # Linux/Mac
 pip install -r ../shared/requirements.txt
 
 # Gerar código gRPC a partir do protofile (Os arquivos _pb2.js e _pb2_grpc.js)
-python -m grpc_tools.protoc -I../shared --python_out=. --grpc_python_out=. ../shared/crypto.proto
+python3 -m grpc_tools.protoc -I../shared --python_out=. --grpc_python_out=. ../shared/crypto.proto
 
 # Executar servidor
-python decryption_server.py
+python3 decryption_server.py
 ```
 
 ## Testando o Sistema
 
-1. Acesse a interface web em `http://localhost:3000`
-2. Ou teste diretamente a API:
+<!-- TODO: Remover essa parte -->
+
+Como ainda não temos virtualização só é possivel testar os componentes independentemente.
+
+### Testando o Web Client
+
+Acesse a interface web em `http://localhost:3000`. Não é possivel testar a funcionalidade.
+
+### Testando o Gateway
+
+Não sei como.
+
+### Testando os Servidores
+
+Utilize os arquivos test.py
 
 ```bash
-# Codificar
-curl -X POST http://localhost:8080/encrypt \
-  -H "Content-Type: application/json" \
-  -d '{"text": "HELLO", "key": "KEY"}'
-
-# Decodificar
-curl -X POST http://localhost:8080/decrypt \
-  -H "Content-Type: application/json" \
-  -d '{"text": "RIJVS", "key": "KEY"}'
+python3 test.py
 ```

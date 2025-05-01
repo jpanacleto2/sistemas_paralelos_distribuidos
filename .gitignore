@@ -1,6 +1,6 @@
-/venv
+venv
 __pycache__
 node_modules
 .env
-*_pb2.js
-*_pb2_grpc.js
+*/crypto_pb2.py
+*/crypto_pb2_grpc.py
