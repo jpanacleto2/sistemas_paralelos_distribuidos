@@ -1,4 +1,4 @@
-# README - Sistema de Criptografia Distribuído com gRPC
+# Sistema de Criptografia Distribuído com gRPC
 
 ## Visão Geral do Projeto
 
@@ -19,7 +19,8 @@ Este projeto implementa um sistema distribuído de criptografia usando:
 ├── web/                 # Aplicação React
 ├── gateway/             # Stub gRPC (Node.js)
 ├── encryptionServer/    # Servidor gRPC A para codificação (Python)
-└── decryptionServer/    # Servidor gRPC B para decodificação (Python)
+├── ecryptionServer/     # Servidor gRPC B para decodificação (Python)
+└── shared/              # Arquivos compartilhados (proto e requirements)
 ```
 
 ## 1. Web Client (React)
