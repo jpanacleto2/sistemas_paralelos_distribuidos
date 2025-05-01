@@ -3,13 +3,13 @@ const cors = require("cors");
 const grpc = require("@grpc/grpc-js");
 const protoLoader = require("@grpc/proto-loader");
 
+
 const app = express();
 app.use(cors());
 app.use(express.json());
+require("dotenv").config();
 
-const PROTO_PATH = "./crypto.proto";
-const ENCRYPT_SERVER_ADDRESS = "localhost:50051"; // Servidor de codificação
-const DECRYPT_SERVER_ADDRESS = "localhost:50052"; // Servidor de decodificação
+const PROTO_PATH = "../shared/crypto.proto";
 
 // Carrega o arquivo .proto
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
@@ -23,12 +23,12 @@ const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 const cryptoProto = grpc.loadPackageDefinition(packageDefinition).crypto;
 
 const encryptClient = new cryptoProto.CryptoService(
-    ENCRYPT_SERVER_ADDRESS,
+    process.env.ENCRYPT_SERVER_ADDRESS,
     grpc.credentials.createInsecure()
 );
 
 const decryptClient = new cryptoProto.CryptoService(
-    DECRYPT_SERVER_ADDRESS,
+    process.env.DECRYPT_SERVER_ADDRESS,
     grpc.credentials.createInsecure()
 );
 
@@ -56,7 +56,6 @@ app.post("/decrypt", (req, res) => {
     });
 });
 
-const PORT = 8080;
 app.listen(PORT, () => {
-    console.log(`API Gateway running on http://0.0.0.0:${PORT}`);
+    console.log(`API Gateway running on http://0.0.0.0:${process.env.PORT}`);
 });

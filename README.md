@@ -33,16 +33,10 @@ cd web
 npm install
 
 # Configurar variáveis de ambiente
-cp .env.example .env
-# Editar .env para apontar para o API Gateway
+cp .env.example .env # Editar .env para apontar para o API Gateway
 
 # Executar aplicação
 npm run dev
-```
-
-**Variáveis de Ambiente:**
-```
-REACT_APP_API_URL=http://localhost:8080
 ```
 
 ## 2. API Gateway (Node.js)
@@ -50,27 +44,19 @@ REACT_APP_API_URL=http://localhost:8080
 ### Configuração e Execução
 
 ```bash
-cd api-gateway
+cd gateway
 
 # Instalar dependências
 npm install
 
-# Gerar código gRPC a partir do protofile
+# Gerar código gRPC a partir do protofile (Os arquivos _pb2.js e _pb2_grpc.js)
 npm run generate
 
 # Configurar variáveis de ambiente
-cp .env.example .env
-# Editar com os endereços dos servidores gRPC
+cp .env.example .env # Editar com os endereços dos servidores gRPC
 
 # Executar
 npm start
-```
-
-**Variáveis de Ambiente:**
-```
-ENCRYPT_SERVER_ADDRESS=localhost:50051
-DECRYPT_SERVER_ADDRESS=localhost:50052
-PORT=8080
 ```
 
 ## 3. Servidor de Codificação (Python)
@@ -78,7 +64,7 @@ PORT=8080
 ### Configuração e Execução
 
 ```bash
-cd encryption-server
+cd encryptionServer
 
 # Criar ambiente virtual (recomendado)
 python -m venv venv
@@ -86,18 +72,13 @@ source venv/bin/activate  # Linux/Mac
 # ou venv\Scripts\activate  # Windows
 
 # Instalar dependências
-pip install -r requirements.txt
+pip install -r ../shared/requirements.txt
 
-# Gerar código gRPC
+# Gerar código gRPC a partir do protofile (Os arquivos _pb2.js e _pb2_grpc.js)
 python -m grpc_tools.protoc -I../shared --python_out=. --grpc_python_out=. ../shared/crypto.proto
 
 # Executar servidor
-python server.py
-```
-
-**Variáveis de Ambiente (opcional):**
-```
-SERVER_PORT=50051
+python encryption_server.py
 ```
 
 ## 4. Servidor de Decodificação (Python)
@@ -105,7 +86,7 @@ SERVER_PORT=50051
 ### Configuração e Execução
 
 ```bash
-cd decryption-server
+cd decryptionServer
 
 # Criar ambiente virtual (recomendado)
 python -m venv venv
@@ -113,33 +94,14 @@ source venv/bin/activate  # Linux/Mac
 # ou venv\Scripts\activate  # Windows
 
 # Instalar dependências
-pip install -r requirements.txt
+pip install -r ../shared/requirements.txt
 
-# Gerar código gRPC
+# Gerar código gRPC a partir do protofile (Os arquivos _pb2.js e _pb2_grpc.js)
 python -m grpc_tools.protoc -I../shared --python_out=. --grpc_python_out=. ../shared/crypto.proto
 
 # Executar servidor
-python server.py
+python decryption_server.py
 ```
-
-**Variáveis de Ambiente (opcional):**
-```
-SERVER_PORT=50052
-```
-
-## Execução com Docker (Opcional)
-
-```bash
-# Na raiz do projeto
-docker-compose up --build
-```
-
-## Ordem Recomendada para Iniciar os Serviços
-
-1. Servidor de Codificação (`encryption-server`)
-2. Servidor de Decodificação (`decryption-server`)
-3. API Gateway (`api-gateway`)
-4. Web Client (`web-client`)
 
 ## Testando o Sistema
 

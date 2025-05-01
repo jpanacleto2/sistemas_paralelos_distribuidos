@@ -2,3 +2,5 @@
 __pycache__
 node_modules
 .env
+*_pb2.js
+*_pb2_grpc.js
