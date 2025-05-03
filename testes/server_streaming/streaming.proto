@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package streaming;
+
+service StreamService {
+    rpc CountTo (CountRequest) returns (stream CountResponse);
+}
+
+message CountRequest{
+    int32 max = 1;
+}
+
+message CountResponse {
+    int32 number = 1;
+}
