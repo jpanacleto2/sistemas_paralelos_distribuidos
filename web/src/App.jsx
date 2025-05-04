@@ -1,9 +1,9 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import './App.css';
 import { GatewayServices } from "./Services/GatewayServices";
 
 function App() {
-    const gatewayServices = new GatewayServices();
+    const gatewayServices = useMemo(() => new GatewayServices(), []);
     const [text, setText] = useState("");
     const [key, setKey] = useState("");
     const [resultText, setResultText] = useState("");
