@@ -79,11 +79,15 @@ if { "$VM_NAME" == "vm1" } {
     expect "# "
     send "curl -L https://www.npmjs.com/install.sh | sh\r"
     expect "# "
-    send "npm install -g n\r"  ;# Instalar o 'n', ferramenta para gerenciamento de versões do Node.js
+    send "npm install -g n\r"
     expect "# "
-    send "n stable\r"  ;# Instalar a versão estável do Node.js
+    send "n stable\r"
 } else {
-    send "apk add python3 py3-pip\r"
+    send "apk add python3\r"
+    expect "# "
+    send "python3 -m venv /root/venv\r"
+    expect "# "
+    send "source /root/venv/bin/activate\r"
 }
 
 expect "# "
@@ -106,7 +110,26 @@ if { "$VM_NAME" == "vm1" } {
     send "sh start-gateway.sh\r"
 } elseif { "$VM_NAME" == "vm2" } {
     send "sh start-encryption-server.sh\r"
+    expect "# "
+    send "uvicorn encryption_server_rest:app --host 0.0.0.0 --port 50061\r"
 } else {
     send "sh start-decryption-server.sh\r"
+    expect "# "
+    send "uvicorn encryption_server_rest:app --host 0.0.0.0 --port 50062\r"
 }
+
+expect "# "
+if { "$VM_NAME" == "vm1" } {
+    send "sh start-gateway.sh\r"
+} elseif { "$VM_NAME" == "vm2" } {
+    send "sh start-encryption-server.sh\r"
+    expect "# "
+    send "uvicorn encryption_server_rest:app --host 0.0.0.0 --port 50061\r"
+} else {
+    send "sh start-decryption-server.sh\r"
+    expect "# "
+    send "uvicorn encryption_server_rest:app --host 0.0.0.0 --port 50062\r"
+}
+
+
 

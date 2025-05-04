@@ -2,8 +2,8 @@
 
 # Variáveis de configuração
 ISO_PATH="/var/lib/libvirt/boot/alpine-standard-3.19.1-x86_64.iso"
-DISK_SIZE="10G"
-MEMORY="512"
+DISK_SIZE="30G"
+MEMORY="1024"
 VCPUS="1"
 NETWORK_NAME="vlan-vegenere"
 VMS=("vm1" "vm2" "vm3")
