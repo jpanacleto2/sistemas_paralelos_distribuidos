@@ -95,8 +95,6 @@ send "cd sistemas_paralelos_distribuidos\r"
 expect "# "
 if { "$VM_NAME" == "vm1" } {
     send "cd gateway\r"
-    expect "# "
-    send "npm install -g pm2\r"
 } elseif { "$VM_NAME" == "vm2" } {
     send "cd encryptionServer\r"
 } else {

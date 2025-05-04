@@ -15,4 +15,4 @@ if [ ! -f .env ]; then
 fi
 
 echo "Iniciando $APP_NAME..."
-start gateway.js --name "$APP_NAME"
+npm start
