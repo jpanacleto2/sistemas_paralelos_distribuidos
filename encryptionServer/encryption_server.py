@@ -19,7 +19,7 @@ class CryptoServicer(crypto_pb2_grpc.CryptoServiceServicer):
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     crypto_pb2_grpc.add_CryptoServiceServicer_to_server(CryptoServicer(), server)
-    server.add_insecure_port('[::]:50051') # Porta para o Server A
+    server.add_insecure_port('[::]:50051') 
     server.start()
     print("Servidor de codificação rodando na porta 50051...")
     server.wait_for_termination()
