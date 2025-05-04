@@ -1,7 +1,7 @@
 {
   "name": "gateway",
   "version": "1.0.0",
-  "description": "",
+  "description": "API Gateway for crypto microservices",
   "main": "gateway.js",
   "scripts": {
     "start": "node gateway.js",
@@ -15,8 +15,9 @@
     "axios": "^1.6.8",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "grpc": "^1.24.11",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
     "grpc-tools": "^1.13.0"
   }
 }
