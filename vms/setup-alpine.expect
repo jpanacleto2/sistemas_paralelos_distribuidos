@@ -1,0 +1,114 @@
+#!/usr/bin/expect -f
+
+set timeout -1
+set VM_NAME [lindex $argv 0];
+set root_password "123";
+
+spawn virsh console $VM_NAME
+
+expect "Connected"
+send "\n"
+
+expect "login:"
+send "root\r"
+
+expect "# "
+send "setup-alpine\r"
+
+expect "Enter system hostname"
+send "$VM_NAME\r"
+
+expect "Which one do you want to initialize?"
+send "eth0\r"
+
+expect "Ip address for eth0?"
+send "dhcp\r"
+
+expect "Do you want to do any manual network configuration?"
+send "n\r"
+
+expect "New password:"
+send "$root_password\r"
+
+expect "Retype password:"
+send "$root_password\r"
+
+expect "Which timezone are you in?"
+send "Brazil/\r"
+
+expect "What sub-timezone of"
+send "West\r"
+
+expect "HTTP/FTP proxy URL?"
+send "none\r"
+
+expect "Enter mirror number or URL:"
+send "1\r"
+
+expect "Setup a user?"
+send "no\r"
+
+expect "Which ssh server?"
+send "openssh\r"
+
+expect "Allow root ssh login?"
+send "yes\r"
+
+expect "Enter ssh key or URL for root"
+send "none\r"
+
+expect "Which disk(s) would you like to use?"
+send "none\r"
+
+expect "Enter where to store configs"
+send "none\r"
+
+expect "Enter apk cache directory"
+send "/var/cache/apk\r"
+
+
+expect "# " 
+send "apk update\r"
+
+expect "# "
+send "apk add git\r"
+
+expect "# "
+if { "$VM_NAME" == "vm1" } {
+    send "apk add nodejs curl\r"
+    expect "# "
+    send "curl -L https://www.npmjs.com/install.sh | sh\r"
+    expect "# "
+    send "npm install -g n\r"  ;# Instalar o 'n', ferramenta para gerenciamento de versões do Node.js
+    expect "# "
+    send "n stable\r"  ;# Instalar a versão estável do Node.js
+} else {
+    send "apk add python3 py3-pip\r"
+}
+
+expect "# "
+send "git clone https://github.com/jpanacleto2/sistemas_paralelos_distribuidos.git\r"
+
+expect "# " 
+send "cd sistemas_paralelos_distribuidos\r"
+
+expect "# "
+if { "$VM_NAME" == "vm1" } {
+    send "cd gateway\r"
+    expect "# "
+    send "npm install -g pm2\r"
+} elseif { "$VM_NAME" == "vm2" } {
+    send "cd encryptionServer\r"
+} else {
+    send "cd decryptionServer\r"
+}
+
+expect "# "
+if { "$VM_NAME" == "vm1" } {
+    send "sh start-gateway.sh\r"
+} elseif { "$VM_NAME" == "vm2" } {
+    send "sh start-encryption-server.sh\r"
+} else {
+    send "sh start-decryption-server.sh\r"
+}
+
