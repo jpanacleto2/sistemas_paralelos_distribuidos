@@ -23,6 +23,9 @@ const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 
 const cryptoPackage = grpc.loadPackageDefinition(packageDefinition).crypto;
 
+const ENCRYPT_SERVER_ADDRESS_REST = process.env.ENCRYPT_SERVER_ADDRESS_REST;
+const DECRYPT_SERVER_ADDRESS_REST = process.env.DECRYPT_SERVER_ADDRESS_REST;
+
 const encryptClient = new cryptoPackage.CryptoService(
     process.env.ENCRYPT_SERVER_ADDRESS,
     grpc.credentials.createInsecure()
@@ -33,7 +36,7 @@ const decryptClient = new cryptoPackage.CryptoService(
     grpc.credentials.createInsecure()
 );
 
-app.post("/encrypt", (req, res) => {
+app.post("/encrypt/", (req, res) => {
     const { text, key } = req.body;
 
     encryptClient.Encrypt({ text, key }, (err, response) => {
@@ -45,7 +48,7 @@ app.post("/encrypt", (req, res) => {
     });
 });
 
-app.post("/decrypt", (req, res) => {
+app.post("/decrypt/", (req, res) => {
     const { text, key } = req.body;
 
     decryptClient.Decrypt({ text, key }, (err, response) => {
@@ -58,30 +61,29 @@ app.post("/decrypt", (req, res) => {
 });
 
 
-app.post("/encrypt_rest", async (req, res) => {
-    const { plaintext, key } = req.body;
-
+app.post("/encrypt_rest/", async (req, res) => {
+    const { text, key } = req.body;
     try {
-        const response = await axios.post(ENCRYPT_SERVER_ADDRESS, {
-            text: plaintext,
+        const response = await axios.post("http://"+ENCRYPT_SERVER_ADDRESS_REST+"/encrypt", {
+            text: text,
             key: key
         });
-        res.json({ ciphertext: response.data.result });
+        res.json({ result: response.data.result });
     } catch (error) {
         console.error("Erro na codificação:", error.message);
         res.status(500).json({ error: "Erro ao codificar texto." });
     }
 });
 
-app.post("/decrypt_rest", async (req, res) => {
-    const { ciphertext, key } = req.body;
+app.post("/decrypt_rest/", async (req, res) => {
+    const { text, key } = req.body;
 
     try {
-        const response = await axios.post(DECRYPT_SERVER_ADDRESS, {
-            text: ciphertext,
+        const response = await axios.post("http://"+DECRYPT_SERVER_ADDRESS_REST+"/decrypt", {
+            text: text,
             key: key
         });
-        res.json({ plaintext: response.data.result });
+        res.json({ result: response.data.result });
     } catch (error) {
         console.error("Erro na decodificação:", error.message);
         res.status(500).json({ error: "Erro ao decodificar texto." });
