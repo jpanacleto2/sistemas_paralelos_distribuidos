@@ -2,3 +2,6 @@ grpcio==1.71.0
 grpcio-tools==1.71.0
 protobuf==5.29.4
 setuptools==80.1.0
+fastapi==0.110.1
+uvicorn[standard]==0.29.0
+pydantic==2.7.1
