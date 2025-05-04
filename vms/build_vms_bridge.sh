@@ -1,13 +1,13 @@
 #!/bin/bash
 
-VM_NAME="vm1"
+# Variáveis de configuração
 ISO_PATH="/var/lib/libvirt/boot/alpine-standard-3.19.1-x86_64.iso"
-DISK_PATH="/var/lib/libvirt/images/${VM_NAME}.qcow2"
 DISK_SIZE="10G"
 MEMORY="512"
 VCPUS="1"
 NETWORK_NAME="vlan-vegenere"
-MAC_ADDRESS="52:54:00:00:00:11"
+VMS=("vm1" "vm2" "vm3")
+MAC_SUFFIX=("11" "12" "13")
 
 # Verifica se o serviço libvirtd está ativo
 if ! systemctl is-active --quiet libvirtd; then
@@ -33,30 +33,40 @@ else
     echo "Rede $NETWORK_NAME já existe."
 fi
 
-# Criar o disco virtual
-echo "Criando o disco virtual..."
-sudo qemu-img create -f qcow2 "$DISK_PATH" "$DISK_SIZE"
+# Loop para criar as VMs vm1, vm2, vm3 com MACs específicos
+for i in "${!VMS[@]}"; do
+    VM_NAME="${VMS[$i]}"
+    MAC_ADDRESS="52:54:00:00:00:${MAC_SUFFIX[$i]}"
 
-# Criar a máquina virtual
-echo "Criando a máquina virtual com rede VLAN e MAC fixo..."
-sudo virt-install \
-  --name "$VM_NAME" \
-  --memory "$MEMORY" \
-  --vcpus "$VCPUS" \
-  --disk path="$DISK_PATH",format=qcow2 \
-  --cdrom "$ISO_PATH" \
-  --os-variant generic \
-  --network network=$NETWORK_NAME,mac=$MAC_ADDRESS \
-  --graphics none \
-  --console pty,target_type=serial \
-  --noautoconsole
+    DISK_PATH="/var/lib/libvirt/images/${VM_NAME}.qcow2"
 
-# Rodar setup-alpine via expect
-echo "Acessando a VM e executando o setup-alpine..."
-sleep 5
-expect setup-alpine.expect "$VM_NAME"
+    # Criar o disco virtual
+    echo "Criando o disco virtual para $VM_NAME..."
+    sudo qemu-img create -f qcow2 "$DISK_PATH" "$DISK_SIZE"
+
+    # Criar a máquina virtual
+    echo "Criando a máquina virtual $VM_NAME com rede VLAN e MAC fixo..."
+    sudo virt-install \
+      --name "$VM_NAME" \
+      --memory "$MEMORY" \
+      --vcpus "$VCPUS" \
+      --disk path="$DISK_PATH",format=qcow2 \
+      --cdrom "$ISO_PATH" \
+      --os-variant generic \
+      --network network=$NETWORK_NAME,mac=$MAC_ADDRESS \
+      --graphics none \
+      --console pty,target_type=serial \
+      --noautoconsole
+
+    # Rodar setup-alpine via expect
+    echo "Acessando $VM_NAME e executando o setup-alpine..."
+    sleep 5
+    expect setup-alpine.expect "$VM_NAME"
+done
 
 # Mensagem final
-echo "A VM foi criada e o SSH foi configurado."
-echo "Você pode acessar a VM agora via SSH usando o IP: $IP_ADDR"
-echo "Comando: ssh root@$IP_ADDR"
+echo "As VMs foram criadas e o SSH foi configurado."
+for VM_NAME in "${VMS[@]}"; do
+    echo "Você pode acessar a VM $VM_NAME via SSH usando o IP correspondente."
+    echo "Comando: ssh root@<IP-DA-$VM_NAME>"
+done
