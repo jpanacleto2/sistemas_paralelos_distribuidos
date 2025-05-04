@@ -107,9 +107,14 @@ python3 decryption_server.py
 
 ## Criação e Configuração das VMs com QEMU/KVM
 
-Este sistema pode ser virtualizado com QEMU/KVM para simular um ambiente distribuído completo. Abaixo está o passo a passo para criar e configurar as VMs.
+Este sistema pode ser virtualizado com QEMU/KVM para simular um ambiente distribuído completo. Abaixo está o passo a passo para criar e configurar as VMs manualmente, porém este processo pode ser feito apenas rodando o comando:
 
-> Durante este processo, recomenda-se inserir capturas de tela (prints) para facilitar a reprodução dos passos via `virt-manager`.
+```bash
+cd vms
+bash build_vms_bridge.sh 
+```
+
+Seguindo com o passo a passo caso prefira fazer desta forma:
 
 ### Instalação do Ambiente de Virtualização
 
