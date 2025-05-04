@@ -110,6 +110,8 @@ python3 decryption_server.py
 Este sistema pode ser virtualizado com QEMU/KVM para simular um ambiente distribuído completo. Abaixo está o passo a passo para criar e configurar as VMs manualmente, porém este processo pode ser feito apenas rodando o comando:
 
 ```bash
+sudo apt install expect
+
 cd vms
 bash build_vms_bridge.sh 
 ```
