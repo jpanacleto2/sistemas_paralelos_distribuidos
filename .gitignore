@@ -6,3 +6,4 @@ node_modules
 */crypto_pb2_grpc.py
 */crypto_pb.js
 */crypto_grpc_pb.js
+*.log
