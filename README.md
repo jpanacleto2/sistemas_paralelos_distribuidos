@@ -107,28 +107,26 @@ python3 decryption_server.py
 
 ## Criação e Configuração das VMs com QEMU/KVM
 
-Este sistema pode ser virtualizado com QEMU/KVM para simular um ambiente distribuído completo. Abaixo está o passo a passo para criar e configurar as VMs manualmente, porém este processo pode ser feito apenas rodando o comando:
-
-```bash
-sudo apt install expect
-
-cd vms
-bash build_vms_bridge.sh 
-```
-
-Seguindo com o passo a passo caso prefira fazer desta forma:
-
 ### Instalação do Ambiente de Virtualização
 
 ```bash
 sudo apt update
-sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients virtinst bridge-utils virt-manager
+sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients virtinst bridge-utils virt-manager expect
 
 sudo adduser $USER kvm
 sudo adduser $USER libvirt
 ```
 
 Após isso, reinicie o sistema para aplicar os grupos.
+
+Este sistema pode ser virtualizado com QEMU/KVM para simular um ambiente distribuído completo. Abaixo está o passo a passo para criar e configurar as VMs manualmente, porém este processo pode ser feito apenas rodando o comando:
+
+```bash
+cd vms
+bash build_vms_bridge.sh 
+```
+
+Na qual cria uma versão otimizada puramente texto utilizando alpine, caso deseje uma solução mais robusta com o Ubuntu server, basta seguir o procedimento a seguir.
 
 ### Preparando a ISO
 
